@@ -18,11 +18,18 @@
       $birthyear = $_POST['birthyear'];
       $mobile = $_POST['mobile'];
       
-      $q = "INSERT INTO userTBL VALUES('$userID', '$userPW', '$fname', '$lname', '$birthyear', '$mobile')";
-      $result = mysqli_query($mysqli, $q);
-      echo "<script>alert('Successfully created new account')</script>";
-      echo "<script>location.replace('login.php');</script>";
-      exit;
+      if ($userPW != $rePW){
+         echo "<script>alert('Password mismatch')</script>";
+         echo "<script>location.replace('register.php');</script>";
+         exit;
+      }
+      else{
+         $q = "INSERT INTO userTBL VALUES('$userID', '$userPW', '$fname', '$lname', '$birthyear', '$mobile')";
+         $result = mysqli_query($mysqli, $q);
+         echo "<script>alert('Successfully created new account')</script>";
+         echo "<script>location.replace('login.php');</script>";
+         exit;
+      }
       
       ?>
    </body>      
