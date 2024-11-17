@@ -13,6 +13,7 @@
       //id and pw from login.php
       $userID = $_POST['id'];
       $userPW = $_POST['pw'];
+      $rePW = $_POST['repw'];
       $fname = $_POST['fname'];
       $lname = $_POST['lname'];
       $birthyear = $_POST['birthyear'];
