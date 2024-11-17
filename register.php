@@ -13,6 +13,9 @@
     <div class="passForm">
       <input type="password" name="pw" class="pw" placeholder="Password">
     </div>
+    <div class="repassForm">
+      <input type="password" name="repw" class="repw" placeholder="Confirm Password">
+    </div>
     <div class="fnameForm">
       <input type="text" name="fname" class="fname" placeholder="First Name">
     </div>
