@@ -66,8 +66,8 @@ else {
 <body>
     <div class="base">
         <h2><?php echo "Hello, $name"; ?></h2>
-        <button type="button" class="btn-large" onclick="location.href='insert_flight_info.php'">
-            Search for Airline
+        <button type="button" class="btn-large" onclick="location.href='insert_info.php'">
+            Travel to Japan
         </button>
     </div>
     <button type="button" class="logout-btn" onclick="location.href='../register/logout.php'">

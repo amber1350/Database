@@ -36,13 +36,11 @@
          exit;
       }
       else{
-         $q = "INSERT INTO userTBL VALUES('$userID', '$userPW', '$fname', '$lname', '$birthyear', '$mobile')";
+         $q = "INSERT INTO userTBL VALUES('$userID', '$userPW', '$fname', '$lname', '$birthyear', '$mobile', null, null)";
          $result = mysqli_query($mysqli, $q);
          echo "<script>alert('Successfully created new account')</script>";
          echo "<script>location.replace('login.php');</script>";
          exit;
-      }
-      
-      
+      }      
       ?>
    </body>      

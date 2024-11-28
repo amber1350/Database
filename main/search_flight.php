@@ -1,33 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Flights</title>
+</head>
+<style>
+    .flight-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 16px;
+        text-align: left;
+    }
+    .flight-table thead tr {
+        background-color: #009879;
+        color: #ffffff;
+        text-align: left;
+        font-weight: bold;
+    }
+    .flight-table th, .flight-table td {
+        padding: 12px 15px;
+        border: 1px solid #dddddd;
+    }
+    .flight-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+    }
+    .flight-table tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+    }
+    .flight-table tbody tr:last-of-type {
+        border-bottom: 2px solid #009879;
+    }
+    .flight-table a {
+        color: #009879;
+        text-decoration: none;
+    }
+    .flight-table a:hover {
+        text-decoration: underline;
+    }
+</style>
+<body>
+    <h2>Select your journey</h2>
 <?php
 session_start();
-print_r($_SESSION);
-if (!isset($_SESSION['userID'])) {
-    echo "<script>alert('로그인 상태가 아닙니다.'); location.replace('../register/login.php');</script>";
-    exit;
-}
+    if(isset($_SESSION['userID'])) {
+        $userID = $_SESSION['userID'];
+        $recom_reg = trim($_GET['recom_reg']);
+        $from_reg = $_GET['from_reg'];
+        $dep_date = $_GET['dep_date'];
+        $arr_date = $_GET['arr_date'];
+    }
 
-include '../register/conn.php'; 
+    include '../register/conn.php';
+    $mysqli = new mysqli($host, $user, $pw, $db_name);
+    
+    $userID = mysqli_real_escape_string($mysqli, $userID);
+    $q1 = "UPDATE travelTBL SET recom_reg = '$recom_reg' WHERE userID = '$userID'";
+    $r1 = mysqli_query($mysqli, $q1);
+
+    $q2 = "SELECT
+                f.flightID,
+                f.from_reg AS dep_airport,
+                f.to_reg AS arr_airport,
+                a_to.region as arr_region,
+                f.dep_date
+            FROM flightTBL f
+            JOIN airportTBL a_to ON f.to_reg = a_to.airportID
+            WHERE
+                f.from_reg = '$from_reg'
+                AND a_to.region = '$recom_reg'
+                AND f.dep_date >= '$dep_date'
+                AND f.dep_date <= '$arr_date'
+            ORDER BY
+                f.dep_date ASC";
+    
+    $go_flight = mysqli_query($mysqli, $q2);
 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $userID = $_SESSION['userID']; 
-    $available_dep = $_POST['DepartureDate']; 
-    $available_ari = $_POST['ArrivalDate'];     
-    $from = $_POST['from'];                   
-    $to = $_POST['to'];                       
-
-    $sql = "INSERT INTO Flightdb.flightTable (userID, DepartureDate, ArrivalDate, `from`, `to`)
-            VALUES ('$userID', '$available_dep', '$available_ari', '$from', '$to')";
-
-    // if (mysqli_query($conn, $sql)) {
-    //     echo "<script>alert('여행 정보가 성공적으로 저장되었습니다!');</script>";
-    // } else {
-    //     echo "데이터 저장 중 오류 발생: " . mysqli_error($conn);
-    // }
-
-    // mysqli_close($conn);
-    echo "<script>alert('Successfully update')</script>";
-    echo "<script>location.replace('../main/index.php');</script>";
-
+if ($go_flight && mysqli_num_rows($go_flight) > 0) {
+    echo "<h3>One-way Flights</h3>";
+    echo "<table class='flight-table'>";
+    echo "<thead><tr><th>Flight ID</th><th>Departure</th><th>Destination</th><th>Dep Date</th></tr></thead>";
+    echo "<tbody>";
+    while ($row = mysqli_fetch_assoc($go_flight)) {
+        $flightID = htmlspecialchars($row['flightID']);
+        $to_reg = $row['arr_airport'];
+        $dep_airport = htmlspecialchars($row['dep_airport']);
+        $arr_airport = htmlspecialchars($row['arr_airport']);
+        $arr_region = htmlspecialchars($row['arr_region']);
+        $dep_date = htmlspecialchars($row['dep_date']);
+        echo "<tr>
+                <td>
+                <a href='return_flight.php?flightID=" . urlencode($flightID) . "&arr_date=" . urlencode($arr_date) . "'>" . htmlspecialchars($flightID) . "</a>
+                </td>
+                <td>" . htmlspecialchars($dep_airport) . "</td>
+                <td>" . htmlspecialchars($arr_airport) . " (" . htmlspecialchars($arr_region) . ")</td>
+                <td>" . htmlspecialchars($dep_date) . "</td>
+              </tr>";
+    }
+    echo "</tbody></table>";
+} else {
+    echo "<p>No flights found for the selected criteria.</p>";
 }
 ?>
