@@ -1,14 +1,12 @@
 <?php
 session_start();
-if(!isset($_SESSION['userID'])) {
-    echo "<script>location.replace('login.php');</script>";   
-    exit;         
-}
-else {
+if (!isset($_SESSION['userID'])) {
+    echo "<script>location.replace('login.php');</script>";
+    exit;
+} else {
     $userID = $_SESSION['userID'];
     $name = $_SESSION['name'];
-    //exit;
-} 
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -61,6 +59,20 @@ else {
         .logout-btn:hover {
             background-color: #e53935;
         }
+        .my-page-btn {
+            display: inline-block;
+            padding: 20px 40px;
+            font-size: 24px;
+            color: white;
+            background-color: #2196F3;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 50px;
+        }
+        .my-page-btn:hover {
+            background-color: #1E88E5;
+        }
     </style>
 </head>
 <body>
@@ -68,6 +80,9 @@ else {
         <h2><?php echo "Hello, $name"; ?></h2>
         <button type="button" class="btn-large" onclick="location.href='insert_info.php'">
             Travel to Japan
+        </button>
+        <button type="button" class="my-page-btn" onclick="location.href='my_page.php'">
+            My Page
         </button>
     </div>
     <button type="button" class="logout-btn" onclick="location.href='../register/logout.php'">
