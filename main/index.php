@@ -13,80 +13,91 @@ if (!isset($_SESSION['userID'])) {
 <head>
     <title>Welcome</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        /* Global Reset */
+        * {
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
             height: 100vh;
-            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('images/airplane1.jpg') no-repeat center center/cover;
+            color: #ffffff;
+            opacity: 0;
+            animation: fadeIn 1s ease-in forwards;
         }
-        .base {
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .container {
             text-align: center;
-        }
-        h2 {
-            margin-bottom: 50px;
-        }
-        .btn-large {
-            display: inline-block;
-            padding: 20px 40px;
-            font-size: 24px;
-            color: white;
-            background-color: #4CAF50;
-            border: none;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 100px;
             border-radius: 5px;
-            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 70px;
+            font-weight: 500;
             margin-bottom: 50px;
+            color: white;
         }
-        .btn-large:hover {
-            background-color: #45a049;
+
+        .btn {
+            display: inline-block;
+            width: 300px;
+            padding: 15px;
+            margin: 10px 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background-color: #558BCF;
+            border: none;
+            border-radius: 30px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
+        .btn:hover {
+            background-color: #426BAF;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
         .logout-btn {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            padding: 10px 20px;
+            display: block;
+            margin: 20px auto 0;
             font-size: 16px;
             color: white;
-            background-color: #f44336;
+            background: none;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
         }
+
         .logout-btn:hover {
-            background-color: #e53935;
-        }
-        .my-page-btn {
-            display: inline-block;
-            padding: 20px 40px;
-            font-size: 24px;
-            color: white;
-            background-color: #2196F3;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 50px;
-        }
-        .my-page-btn:hover {
-            background-color: #1E88E5;
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="base">
-        <h2><?php echo "Hello, $name"; ?></h2>
-        <button type="button" class="btn-large" onclick="location.href='insert_info.php'">
-            Travel to Japan
-        </button>
-        <button type="button" class="my-page-btn" onclick="location.href='my_page.php'">
-            My Page
-        </button>
+    <div class="container">
+        <h1><?php echo "Hello, $name"; ?></h1>
+        <button class="btn" onclick="location.href='insert_info.php'">Travel to Japan</button>
+        <button class="btn" onclick="location.href='my_page.php'">My Page</button><br><br>
+        <button class="logout-btn" onclick="location.href='../register/logout.php'">Logout</button>
     </div>
-    <button type="button" class="logout-btn" onclick="location.href='../register/logout.php'">
-        LOGOUT
-    </button>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../register/conn.php'; // DB 연결 파일 포함
+include '../register/conn.php';
 
 if (!isset($_SESSION['userID'])) {
     echo "<script>location.replace('login.php');</script>";
@@ -9,13 +9,11 @@ if (!isset($_SESSION['userID'])) {
     $userID = $_SESSION['userID'];
 }
 
-// DB 연결
 $mysqli = new mysqli($host, $user, $pw, $db_name);
 if ($mysqli->connect_error) {
     die("Connection failed: " . $mysqli->connect_error);
 }
 
-// 사용자 정보 가져오기
 $userQuery = "SELECT userID, firstName, lastName, mobile, back_flight FROM userTBL WHERE userID = '$userID'";
 $userResult = mysqli_query($mysqli, $userQuery);
 if (!$userResult) {
@@ -23,7 +21,6 @@ if (!$userResult) {
 }
 $userInfo = mysqli_fetch_assoc($userResult);
 
-// 예매 항공 정보 가져오기
 $bookingQuery = "
     SELECT
         userTBL.go_flight AS flightID,
@@ -55,43 +52,47 @@ $bookingQuery = "
 ";
 $bookingResult = mysqli_query($mysqli, $bookingQuery);
 
-// back_flight 업데이트 (GET 파라미터 기반)
-if (isset($_GET['flightID'])) {
-    $back_flightID = mysqli_real_escape_string($mysqli, $_GET['flightID']);
-    $updateQuery = "UPDATE userTBL SET back_flight = '$back_flightID' WHERE userID = '$userID'";
-    if (mysqli_query($mysqli, $updateQuery)) {
-        echo "<script>alert('Return flight successfully updated!');</script>";
-    } else {
-        echo "<script>alert('Failed to update return flight: " . mysqli_error($mysqli) . "');</script>";
-    }
-}
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>My Page</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f0f0f0;
+            height: 100vh;
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            margin: 0; 
+            /* background: linear-gradient(to bottom, #A8D1FF, #558BCF); */
+            background: url('../main/images/airplane1.jpg') no-repeat center center/cover;
+
         }
+
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            text-align: center;
+            width: 800px;
             background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
         }
         h2 {
+            font-size: 28px
             margin-bottom: 20px;
-            color: #333333;
+            color: #558BCF;
         }
         p {
             font-size: 18px;
             margin: 10px 0;
+            color: #333333;
         }
         table {
             width: 100%;
@@ -100,25 +101,26 @@ if (isset($_GET['flightID'])) {
         }
         table th, table td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 12px;
             text-align: center;
         }
         table th {
-            background-color: #4CAF50;
+            background-color: #558BCF;
             color: white;
         }
         .back-btn {
             margin-top: 20px;
-            padding: 10px 20px;
+            padding: 12px 25px;
             font-size: 16px;
             color: white;
-            background-color: #4CAF50;
+            background-color: #558BCF;
             border: none;
-            border-radius: 5px;
+            border-radius: 30px;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
         .back-btn:hover {
-            background-color: #45a049;
+            background-color: #426BAF;
         }
     </style>
 </head>
@@ -130,12 +132,11 @@ if (isset($_GET['flightID'])) {
             <p><strong>First Name:</strong> <?php echo $userInfo['firstName']; ?></p>
             <p><strong>Last Name:</strong> <?php echo $userInfo['lastName']; ?></p>
             <p><strong>Mobile:</strong> <?php echo $userInfo['mobile']; ?></p>
-            <p><strong>Return Flight ID:</strong> <?php echo $userInfo['back_flight'] ?: 'Not set'; ?></p>
         <?php else: ?>
             <p>No user information found.</p>
         <?php endif; ?>
-        
-        <h2>Booked Flights</h2>
+        <br>
+        <br><h2>Booked Flights</h2>
         <?php if (mysqli_num_rows($bookingResult) > 0): ?>
             <table>
                 <thead>
@@ -144,7 +145,6 @@ if (isset($_GET['flightID'])) {
                         <th>From</th>
                         <th>To</th>
                         <th>Departure Date</th>
-                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -154,9 +154,6 @@ if (isset($_GET['flightID'])) {
                             <td><?php echo $row['from_reg']; ?></td>
                             <td><?php echo $row['to_reg']; ?></td>
                             <td><?php echo $row['dep_date']; ?></td>
-                            <td>
-                                <a href="my_page.php?flightID=<?php echo $row['flightID']; ?>">Set as Return Flight</a>
-                            </td>
                         </tr>
                     <?php endwhile; ?>
                 </tbody>

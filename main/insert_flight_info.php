@@ -10,6 +10,7 @@
     margin: 0 auto;
     height: 100vh;
     /* background-color: lightblue; */
+    
     }
     input {
       display: flex;

@@ -4,15 +4,37 @@
   <title>Flights</title>
 </head>
 <style>
+    body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            /* display: flex; */
+            align-items: center;
+            /* background: url('images/sky4.jpg') no-repeat center center/cover; */
+        }
+
+    h2 {
+        margin-left: 20px;
+        margin-bottom: 20px;
+        font-size: 32px;
+        color: #0D1E44;
+        }
+    h3 {
+        margin-left: 20px;
+        margin-bottom: 15px;
+        font-size: 26px;
+        color: #0D1E44;
+
+    }
     .flight-table {
-        width: 100%;
+        width: 95%;
         border-collapse: collapse;
-        margin: 20px 0;
+        margin: 20px;
         font-size: 16px;
         text-align: left;
     }
     .flight-table thead tr {
-        background-color: #009879;
+        background-color: #558BCF;
         color: #ffffff;
         text-align: left;
         font-weight: bold;
@@ -28,10 +50,10 @@
         background-color: #f3f3f3;
     }
     .flight-table tbody tr:last-of-type {
-        border-bottom: 2px solid #009879;
+        border-bottom: 2px solid #558BCF;
     }
     .flight-table a {
-        color: #009879;
+        color: #558BCF;
         text-decoration: none;
     }
     .flight-table a:hover {
